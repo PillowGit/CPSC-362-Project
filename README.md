@@ -1,38 +1,19 @@
-# create-svelte
+# Documentation
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+# Workflow
 
-## Creating a project
+## Backend
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Design database [**Pillow/jorge**]
+- Import Google Sheets API backend [**Pillow**]
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Frontend
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- Design website (maybe use figma?) [**Mark & Conrad**]
+- Pick a framework (react, svelte, raw html, etc) [**Mark & Conrad**]
 
-## Developing
+# Updates
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### v0.1
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Create & Assign tasks
