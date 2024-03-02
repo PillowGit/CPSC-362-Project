@@ -13,7 +13,7 @@
 </a>
 <p></p>
 
-{#if (data.cookie !== undefined)}
+{#if (data.isAuthed)}
   <a href="home/">
     <button class="reuse-login">
       Sign into previous session

@@ -1,6 +1,9 @@
+// database function to validate if cookie is stored
+import { cookieExists } from '$lib/server/database.js';
+
 export function load({ cookies }) {
-    const auth_cookie = cookies.get('auth-cookie');
+    const auth = cookies.get('auth');
     return {
-        cookie: auth_cookie,
+        isAuthed: auth && cookieExists(auth),
     };
 }
