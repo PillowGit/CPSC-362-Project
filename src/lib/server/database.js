@@ -40,9 +40,10 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
  * Gather the spreadsheets data to verify users with
  * 
  */
-const userData = (await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU")).values;
-const dataStores = {};
-console.dir(`Using the following env variables:\n${g_client_email}\n${g_private_key}`);
+const response = await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU");
+console.dir(response);
+const userData = response.values;
+let dataStores = {};
 console.dir("Checking the following user data:");
 console.dir(userData);
 userData.forEach((row) => {
