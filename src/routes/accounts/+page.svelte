@@ -21,7 +21,7 @@
         {#each data.accounts as account_ (account_.title)}
         <a href={`/list/${account_.username}`}>
             <div class="account">
-                <img src="/images/todo-list.png" alt="List Display Image" class="listpicture">
+                <img src="/images/todo-list.png" alt="List Profile" class="listpicture">
                 <div class="listinfo">
                     <h3>{account_.title}</h3>
                     <p>Created by: {account_.author}</p>

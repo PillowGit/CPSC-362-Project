@@ -24,13 +24,6 @@ const sheets = google.sheets({ version: 'v4', auth: client });
  * Simple sheets reading function
  * 
  */
-console.log("Checking private key .env:")
-console.log("HERES HTE PRIVATE KEY-------------------")
-console.log(`${g_private_key}`);
-console.log("----------------------------------------");
-if (!g_private_key) {
-    console.error("Private key not found in .env");
-}
 async function readSheet(range_ = "A:Z", sheetId = "") {
     try {
         const response = await sheets.spreadsheets.values.get({
@@ -50,7 +43,6 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
 const response = await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU");
 const userData = response.values;
 let dataStores = {};
-console.log(userData);
 userData.forEach((row) => {
     dataStores[row[5]] = {
         username: row[0],
@@ -70,7 +62,6 @@ userData.forEach((row) => {
 
 // check if cookie is in database
 export function cookieExists(cookie) {
-    console.log(`Cookie exists was called with cookie: ${cookie} and returned ${dataStores[cookie] !== undefined}`);
     return dataStores[cookie] !== undefined;
 }
 
@@ -101,9 +92,6 @@ export async function makeCookie(username, password) {
 
 // get all of a users valid accounts from the database using their cookies
 export function getValidAccounts(cookie_list) {
-    console.dir(`Checking the following cookie_list: ${cookie_list}`);
-    console.dir(`Cross checking the following database entries:`);
-    console.dir(dataStores);
     let ret = [];
     for (let i = 0; i < cookie_list.length; i++) {
         if (dataStores[cookie_list[i]] !== undefined) {
@@ -114,6 +102,5 @@ export function getValidAccounts(cookie_list) {
             });
         }
     }
-    console.dir(`Returning the account list: ${ret}`);
     return ret;
 }
