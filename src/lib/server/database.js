@@ -42,6 +42,7 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
  */
 const userData = (await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU")).values;
 const dataStores = {};
+console.dir(`Using the following env variables:\n${g_client_email}\n${g_private_key}`);
 console.dir("Checking the following user data:");
 console.dir(userData);
 userData.forEach((row) => {
