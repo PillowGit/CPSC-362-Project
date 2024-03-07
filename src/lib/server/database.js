@@ -25,7 +25,9 @@ const sheets = google.sheets({ version: 'v4', auth: client });
  * 
  */
 console.log("Checking private key .env:")
-console.log(g_private_key);
+console.log("HERES HTE PRIVATE KEY-------------------")
+console.log(`${g_private_key}`);
+console.log("----------------------------------------");
 if (!g_private_key) {
     console.error("Private key not found in .env");
 }
