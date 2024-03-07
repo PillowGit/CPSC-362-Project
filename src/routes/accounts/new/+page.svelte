@@ -5,7 +5,6 @@
 
 <PageColor />
 <Navbar />
-<h1>Sign up for a new list</h1>
 
 <style>
 </style>

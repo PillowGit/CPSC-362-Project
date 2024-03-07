@@ -1,10 +1,10 @@
 <header>
     <!-- Home Button -->
     <a href="/">
-    <img src="images/home.png" alt="Home Button" class="homebutton"/>
+    <img src="/images/home.png" alt="Home Button" class="homebutton"/>
     <!-- Code Repo button -->
     <a href="https://github.com/PillowGit/CPSC-362-Project" target="_blank">
-    <img src="images/code.png" alt="Source Code" class="codebutton"/>
+    <img src="/images/code.png" alt="Source Code" class="codebutton"/>
 </header>
 
 <style>
