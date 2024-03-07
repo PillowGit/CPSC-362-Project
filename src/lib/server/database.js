@@ -5,7 +5,7 @@
  */
 import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
-import { g_client_email, g_private_key } from '$env/static/private';
+import { g_client_email, g_private_key, g_sheet_id } from '$env/static/private';
 
 /**
  * 
@@ -40,7 +40,7 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
  * Gather the spreadsheets data to verify users with
  * 
  */
-const response = await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU");
+const response = await readSheet("UserData", g_sheet_id);
 const userData = response.values;
 let dataStores = {};
 userData.forEach((row) => {
