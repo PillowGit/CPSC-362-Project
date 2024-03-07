@@ -5,15 +5,16 @@
  */
 import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
-import { client_email, private_key } from './credentials.json';
+import { g_client_email, g_private_key } from '$env/static/private';
+
 /**
  * 
  * Authorize our google client and initialize sheets api
  * 
  */
 const client = new JWT({
-    email: client_email,
-    key: private_key,
+    email: g_client_email,
+    key: g_private_key,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 client.authorize();

@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dotenv": "^16.4.5",
 		"google-auth-library": "^9.6.3",
 		"googleapis": "^133.0.0"
 	}
