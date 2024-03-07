@@ -1,7 +1,10 @@
 <script>
+    // Reusable components
     import Navbar from '$lib/navbar.svelte';
     import PageColor from '$lib/pagecolor.svelte';
-
+    // Sveltekit imports
+    import { enhance } from '$app/forms';
+    // Variables to be filled out in the form
     let username = '';
     $:username = username.toLowerCase().replace(/\W/g, '').substring(0,60);
     let password = '';
@@ -10,6 +13,8 @@
     $:title = title.substring(0, 60);
     let author = '';
     $:author = author.replace(/\W/g, '').substring(0, 60);
+    // Form data response
+    export let form;
 </script>
 
 <PageColor />
@@ -19,10 +24,9 @@
     <!-- New Account Title Card -->
     <h1 class="title">
         Create New To-Do List
-        <br>
     </h1>
     <!-- Form -->
-    <form method="POST" action="?/create" class="formitems">
+    <form method="POST" action="?/create" class="formitems" use:enhance>
         <label class="formentry">
             <p>Username:</p>
             <input
@@ -56,6 +60,9 @@
                 bind:value={author}
             />
         </label>
+        {#if form?.status}
+            <p class="formstatus">{form.status}</p>
+        {/if}
         <button type="submit" class="submitbutton">Create</button>
     </form>
 </div>
@@ -75,10 +82,11 @@
         text-align: center;
         font-size: 4rem;
         font-style: italic;
+        margin-bottom: 2rem;
     }
     /* Define the grid that will hold every form component */
     .formitems {
-        margin-top: 2rem;
+        margin-top: 0rem;
         margin-bottom: 10rem;
         width: 36rem;
         display: grid;
@@ -107,7 +115,7 @@
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
         height: 2rem;
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         height: 50%;
     }
     /* Define how the submission button looks */
@@ -126,5 +134,13 @@
         font-size: 2rem;
         color: #ECEFF4;
         justify-self: center;
+    }
+    /* How to format form errors */
+    .formstatus {
+        color: red;
+        text-align: center;
+
+        margin-top: 2rem;
+        margin-bottom: 0rem;
     }
 </style>
