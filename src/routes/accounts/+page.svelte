@@ -1,5 +1,12 @@
 <script>
-    // This is the page with all your accounts
+    import Navbar from '$lib/navbar.svelte';
+    import PageColor from '$lib/pagecolor.svelte';
+    // Good luck with grids
+    // https://css-tricks.com/snippets/css/complete-guide-grid/
 </script>
 
-<h1>Accounts:</h1>
+<PageColor />
+<Navbar />
+
+<style>
+</style>

@@ -9,7 +9,12 @@
 
     // A template for how this can be implemented in svelte is below:
     // Please implement html for both authed and not authed
+    import Navbar from '$lib/navbar.svelte';
+    import PageColor from '$lib/pagecolor.svelte';
 </script>
+
+<PageColor />
+<Navbar />
 
 {#if data.authorized}
     <h1>Here's your to-do list:</h1>
@@ -18,3 +23,6 @@
     <h1>Log in to access this page</h1>
     <p>Here's where we'll display the login form</p>
 {/if}
+
+<style>
+</style>
