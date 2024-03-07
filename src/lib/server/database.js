@@ -24,8 +24,11 @@ const sheets = google.sheets({ version: 'v4', auth: client });
  * Simple sheets reading function
  * 
  */
-console.log(g_client_email);
+console.log("Checking private key .env:")
 console.log(g_private_key);
+if (!g_private_key) {
+    console.error("Private key not found in .env");
+}
 async function readSheet(range_ = "A:Z", sheetId = "") {
     try {
         const response = await sheets.spreadsheets.values.get({
