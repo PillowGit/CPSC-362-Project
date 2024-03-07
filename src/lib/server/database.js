@@ -42,6 +42,8 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
  */
 const userData = (await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU")).values;
 const dataStores = {};
+console.dir("Checking the following user data:");
+console.dir(userData);
 userData.forEach((row) => {
     dataStores[row[5]] = {
         username: row[0],
