@@ -42,12 +42,13 @@ async function readSheet(range_ = "A:Z", sheetId = "") {
 const userData = (await readSheet("UserData", "1kFx9KdDyI7gvLkQYrt8YUIo3-cBkMkNiMCXcgjJ9ctU")).values;
 const dataStores = {};
 userData.forEach((row) => {
-    dataStores[row[4]] = {
+    dataStores[row[5]] = {
         username: row[0],
         password: row[1],
-        name: row[2],
-        sheetId: row[3],
-        cookie: row[4],
+        title: row[2],
+        author: row[3],
+        sheetId: row[4],
+        cookie: row[5],
     };
 });
 
@@ -76,4 +77,33 @@ export async function sha256(message) {
     const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
   
     return hashHex; // Or return hashBuffer for raw binary data
+}
+
+// make cookie function
+export async function makeCookie(username, password) {
+    const hash = await sha256(`,${username}:${password}i`);
+    if (cookieExists(hash)) {
+        return null;
+    } else {
+        return hash;
+    }
+}
+
+// get all of a users valid accounts from the database using their cookies
+export function getValidAccounts(cookie_list) {
+    console.dir(`Checking the following cookie_list: ${cookie_list}`);
+    console.dir(`Cross checking the following database entries:`);
+    console.dir(dataStores);
+    let ret = [];
+    for (let i = 0; i < cookie_list.length; i++) {
+        if (dataStores[cookie_list[i]] !== undefined) {
+            ret.push({
+                title: dataStores[cookie_list[i]].title,
+                author: dataStores[cookie_list[i]].author,
+                username: dataStores[cookie_list[i]].username,
+            });
+        }
+    }
+    console.dir(`Returning the account list: ${ret}`);
+    return ret;
 }

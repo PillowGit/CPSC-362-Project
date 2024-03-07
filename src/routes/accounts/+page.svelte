@@ -16,28 +16,22 @@
             + Add To-Do List
         </button>
     </a>
-    <!-- Grid for list of accounts -->
-    <!-- Snippit for showing account list if there's any
     {#if data.accounts && data.accounts.length > 0}
-        <p>there's data!</p>
-    {/if}
-    -->
-    <div class="accounts">
-        {#each [1,2,3,4,5,6,7,8,9,10] as i}
-        <div class="account">
-            <img src="/images/todo-list.png" alt="List Display Image" class="listpicture">
-            <div class="listinfo">
-                <!--
-                    Title
-                    _blank_
-                    Author
-                -->
-                <h3>This is list #{i}</h3>
-                <p>Created by: user{i}</p>
+        <div class="accounts">
+        {#each data.accounts as account_ (account_.title)}
+        <a href={`/list/${account_.username}`}>
+            <div class="account">
+                <img src="/images/todo-list.png" alt="List Display Image" class="listpicture">
+                <div class="listinfo">
+                    <h3>{account_.title}</h3>
+                    <p>Created by: {account_.author}</p>
+                </div>
             </div>
-        </div>
+        </a>
         {/each}
-    </div>
+        </div>
+    {/if}
+        
 </div>
 
 <style>
@@ -70,7 +64,8 @@
     }
     /* Grid that displays account list */
     .accounts {
-        margin-top: 1rem;
+        margin-top: 3rem;
+        margin-bottom: 10rem;
         display: grid;
         grid-template-rows: repeat(3, 1fr);
         gap: 1rem;
@@ -113,6 +108,14 @@
 
         text-align: left;
         font-size: 1rem;
+    }
+    p {
+        font-style: italic;
+        color: #D8DEE9;
+    }
+    a {
+        color: #FFFFFF;
+        text-decoration: none;
     }
 </style>
 

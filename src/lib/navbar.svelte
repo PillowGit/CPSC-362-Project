@@ -9,8 +9,8 @@
 
 <style>
     img {
-        height: 100%;
-        width: 2.75%;
+        height: 3rem;
+        width: 3rem;
         -webkit-filter: invert(1);
         filter: invert(1);
     }
@@ -38,7 +38,7 @@
         border-color: #4C566A;
         border-radius: 2px;
         background-color: #3B4252;
-        height: 5%;
+        height: 3rem;
         /* Make it display items */
         display: inline-flex;
     }
