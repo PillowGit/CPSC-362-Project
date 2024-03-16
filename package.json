@@ -31,6 +31,7 @@
 	"type": "module",
 	"dependencies": {
 		"dotenv": "^16.4.5",
+		"firebase": "^10.8.1",
 		"google-auth-library": "^9.6.3",
 		"googleapis": "^133.0.0"
 	}

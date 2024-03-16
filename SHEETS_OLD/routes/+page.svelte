@@ -17,7 +17,7 @@
         <br>
     </h1>
     <!-- Login button -->
-    <a href="/login">
+    <a href="/accounts">
         <button class="loginbutton">Login</button>
     </a>
 </div>
@@ -32,9 +32,7 @@
         width: 50%;
         height: 80%;
         margin-top: 10%;
-        margin-bottom: 10%;
         margin-left: 25%;
-        margin-right: 25%;
     }
     .title {
         text-align: center;
