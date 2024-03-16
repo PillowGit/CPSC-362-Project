@@ -1,13 +1,20 @@
 <script>
     // Declare form variables & their restraints
     let username = '';
-    $:username = username.toLowerCase().replace(/\W/g, '').substring(0,60);
+    $:username = username.toLowerCase().replace(/\W/g, '').substring(0,35);
     let password = '';
-    $:password = password.replace(/\W/g, '').substring(0, 20);
+    $:password = password.replace(/\W/g, '').substring(0, 30);
     let title = '';
     $:title = title.substring(0, 60);
     let author = '';
     $:author = author.replace(/\W/g, '').substring(0, 60);
+    let hidden = true;
+    function show() {
+        hidden = false;
+    }
+    function hide() {
+        hidden = true;
+    }
     // Import useful components
     import Navbar from '$lib/navbar.svelte';
     import PageColor from '$lib/pagecolor.svelte';
@@ -35,17 +42,31 @@
                 name="username"
                 autocomplete="off"
                 autocapitalize="on"
+                placeholder="Username"
                 bind:value={username}
             />
         </label>
         <label class="formentry">
             <p>Password</p>
-            <input
-                name="password"
-                autocomplete="off"
-                bind:value={password}
-            />
+            {#if hidden}
+                <input
+                    name="password"
+                    autocomplete="off"
+                    placeholder="Password"
+                    type="password"
+                    bind:value={password}
+                />
+            {:else}
+                <input
+                    name="password"
+                    autocomplete="off"
+                    placeholder="Password"
+                    type="text"
+                    bind:value={password}
+                />
+            {/if}
         </label>
+        <img src = "images/eye.svg" alt="eye" class="eye" on:mouseover={show} on:mouseleave={hide} />
         {#if form?.status}
             <p class="formstatus">{form.status}</p>
         {/if}
@@ -82,6 +103,14 @@
         border-bottom: 0.2rem solid rgba(236, 239, 244, 0.4);
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
+    }
+    .eye {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+        height: 2rem;
+        width: 2rem;
+        margin-top: -5.1rem;
+        justify-self: right;
     }
     /* Style every form entry into a grid */
     .formitems {
