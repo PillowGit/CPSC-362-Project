@@ -1,13 +1,22 @@
-// Form fail function
+// Imports
+import { redirect } from '@sveltejs/kit';
 import { fail } from '@sveltejs/kit';
-
-// on load handler
-
-
-// Handle user login
 import makeAuth from '$lib/server/utils/makeAuth';
 import getData from '$lib/server/firebase/getData';
-// takes (username, password)
+
+// Handle user who's already logged in, if necessary
+export const load = async({ cookies }) => {
+  const auth = cookies.get('auth');
+  if (auth == undefined) return {};
+  const sheet = await getData("userdata", "auths");
+  if (sheet.error == null) {
+    if (sheet.result.data[auth] != undefined) {
+      redirect(302, `/account/${sheet.result.data[auth]}`);
+    }
+  }
+}
+
+// Handle user login
 export const actions = {
   create: async({ request, cookies }) => {
     // Get data from form submission
@@ -23,10 +32,11 @@ export const actions = {
     if (errors.length > 0) return fail(400, { "errors": errors });
     // Check users login
     const auth = await makeAuth(username, password);
-    const sheet = await getData("users", auth);
+    const sheet = await getData("userdata", "users");
     if (sheet.error) return fail(400, { "errors": ["Server Error","Failed to retrieve logins from database"] });
     if (!sheet.result.data[auth] || sheet.result.data[auth].username != username || sheet.result.data[auth].password != password) return fail(400, { "errors": ["Invalid username or password"] });
-    // not done yet :)
-    return fail(400, { errors: ["login success but not implemented yet"] });
+    // Successful login, set cookie and send to account page
+    cookies.set('auth', auth, { path: '/' });
+    redirect(302, `/account/${username}`);
   },
 }

@@ -8,3 +8,20 @@
 
 <PageColor />
 <Navbar />
+{#if data?.error}
+<h1 class="errortext">
+    {data.error}
+</h1>
+{:else}
+<h1 class="errortext">
+    Authorized :)
+</h1>
+{/if}
+
+<style>
+    .errortext {
+        color: red;
+        text-align: center;
+        padding-top: 10rem;
+    }
+</style>

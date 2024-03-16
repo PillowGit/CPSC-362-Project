@@ -72,7 +72,8 @@
                 {/each}
             </p>
         {/if}
-        <button type="submit" class="submitbutton">Create</button>
+        <button type="submit" class="submitbutton">Login</button>
+        <p class="createacc">Don't have an account? <a href="/login/new">Create one here</a></p>
     </form>
 </div>
 
@@ -106,6 +107,21 @@
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
     }
+    /* Format the redirect text for new accounts */
+    .createacc {
+        text-align: center;
+        font-size: 1.1rem;
+        font-style: italic;
+        margin-top: 2rem;
+        margin-bottom: -1rem;
+        color: rgb(236, 239, 244);
+        color: rgba(236, 239, 244, 0.8);
+    }
+    .createacc a {
+        color: rgb(167, 169, 173);
+        color: rgba(167, 169, 173, 0.8);
+    }
+    /* Format the eye that allows to see the password */
     .eye {
         -webkit-filter: invert(1);
         filter: invert(1);

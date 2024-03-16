@@ -5,6 +5,9 @@
     <!-- Code Repo button -->
     <a href="https://github.com/PillowGit/CPSC-362-Project" target="_blank">
     <img src="/images/code.png" alt="Source Code" class="codebutton"/>
+    <!-- Logout button -->
+    <a href="/logout">
+    <img src="/images/logout.svg" alt="Logout Button" class="logoutbutton"/>
 </header>
 
 <style>
@@ -23,6 +26,11 @@
         position: absolute;
         right: 0;
         margin-right: 0.6rem;
+    }
+    .logoutbutton {
+        position: absolute;
+        right: 0;
+        margin-right: 5rem;
     }
     /* Define how the header works */
     header {
