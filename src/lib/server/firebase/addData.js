@@ -1,4 +1,4 @@
-import firebase_app from '@/lib/firebase/firebase';
+import firebase_app from '$lib/server/firebase/firebase';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 // Get the Firestore instance

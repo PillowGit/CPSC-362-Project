@@ -20,8 +20,6 @@
     import PageColor from '$lib/pagecolor.svelte';
     // Import sveltes form enhance
     import { enhance } from '$app/forms';
-    // Get data from server load
-    export let data;
     // Get data from the form
     export let form;
 </script>
@@ -67,8 +65,12 @@
             {/if}
         </label>
         <img src = "images/eye.svg" alt="eye" class="eye" on:mouseover={show} on:mouseleave={hide} />
-        {#if form?.status}
-            <p class="formstatus">{form.status}</p>
+        {#if form?.errors}
+            <p class="formstatus">
+                {#each form.errors as error}
+                    {error}<br>
+                {/each}
+            </p>
         {/if}
         <button type="submit" class="submitbutton">Create</button>
     </form>
