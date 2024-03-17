@@ -1,53 +1,113 @@
-<header>
-    <!-- Home Button -->
-    <a href="/">
-    <img src="/images/home.png" alt="Home Button" class="homebutton"/>
-    <!-- Code Repo button -->
-    <a href="https://github.com/PillowGit/CPSC-362-Project" target="_blank">
-    <img src="/images/code.png" alt="Source Code" class="codebutton"/>
-    <!-- Logout button -->
-    <a href="/logout">
-    <img src="/images/logout.svg" alt="Logout Button" class="logoutbutton"/>
+<script>
+    const navleft = [
+        {
+            name: "Home",
+            href: "/",
+            src: "/images/home.svg",
+            alt: "Home Button",
+        }, 
+    ];
+    const navright = [
+        {
+            name: "logout",
+            href: "/logout",
+            src: "/images/logout.svg",
+            alt: "Logout Button",
+        },
+        {
+            name: "code",
+            href: "https://github.com/PillowGit/CPSC-362-Project",
+            src: "/images/code.svg",
+            alt: "Source Code",
+        },
+    ];
+</script>
+
+<header class="container">
+    <div></div>
+    <div></div>
+    <div class="leftdisplay">
+        {#each navleft.entries() as [index, item]}
+            <a href={item.href}>
+            <img src={item.src} alt={item.alt} class="item"/>
+            </a>
+            {#if index < navleft.length - 1}
+                <div class="divider"></div>
+            {/if}
+        {/each}
+    </div>
+    <div class="rightdisplay">
+        {#each navright.entries() as [index, item]}
+            <a href={item.href}>
+            <img src={item.src} alt={item.alt} class="item"/>
+            </a>
+            {#if index < navright.length - 1}
+                <div class="divider"></div>
+            {/if}
+        {/each}
+    </div>
 </header>
 
+
 <style>
-    img {
+    /* Navbar Holder */
+    .container {
+        /* Styling  */
+        border-bottom: 0.25rem solid rgb(236, 239, 244);
+        border-bottom: 0.15rem solid rgba(236, 239, 244, 0.4);
+        /* Priority */
+        z-index: 1000;
+        background-color: #2E3440;
+        /* Sizing */
+        height: 4.5rem;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        /* Position */
+        position: fixed;
+        top: -.5rem;
+        left: 0;
+        right: 0;
+        /* Position containers */
+        display: grid;
+        grid-template-rows: 1rem 3rem;
+        grid-template-columns: 50% 50%;
+    }
+    /* Left Side display */
+    .leftdisplay {
+        /* Position items */
+        margin-left: 0.5rem;
+        display: grid;
+        grid-template-rows: 3rem;
+        justify-content: start;
+        grid-template-columns: repeat(1, 3rem 1.5rem);
+    }
+    /* Right Side display */
+    .rightdisplay {
+        /* Position items */
+        margin-right: 0.5rem;
+        display: grid;
+        grid-template-rows: 3rem;
+        justify-content: end;
+        grid-template-columns: repeat(1, 3rem 1.5rem) 3rem;
+    }
+    /* The silly little images */
+    .item {
         height: 3rem;
         width: 3rem;
         -webkit-filter: invert(1);
         filter: invert(1);
+        margin-left: 0;
+        margin-right: 0;
     }
-    .homebutton {
-        position: absolute;
-        left: 0;
-        margin-left: 0.6rem;
-    }
-    .codebutton {
-        position: absolute;
-        right: 0;
-        margin-right: 0.6rem;
-    }
-    .logoutbutton {
-        position: absolute;
-        right: 0;
-        margin-right: 5rem;
-    }
-    /* Define how the header works */
-    header {
-        /* Keep fixed on top */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1;
-        /* Give it a border so it is visible */
-        border-style: solid;
-        border-width: 2px;
-        border-color: #4C566A;
-        border-radius: 2px;
-        background-color: #3B4252;
-        height: 3rem;
-        /* Make it display items */
-        display: inline-flex;
+    /* The silly little dividers */
+    .divider {
+        margin-left: 0.675rem;
+        margin-right: 0.675rem;
+        margin-top: 0.25rem;
+        height: 2.5rem;
+        width: 0.15rem;
+        background-color: rgb(236, 239, 244);
+        background-color: rgba(236, 239, 244, 0.4);
     }
 </style>
