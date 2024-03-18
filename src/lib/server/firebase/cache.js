@@ -62,6 +62,12 @@ add_section("auths", 1000);
 add_section("lists", 100);
 
 // Adds a node to the front of its corresponding section
+/**
+ * 
+ * @param {string} store 
+ * @param {string} key 
+ * @param {any} value 
+ */
 export function add_item(store, key, value) {
   if (cache[store] === undefined) {
     throw new Error(`Attempt to add to non-existent section: ${store}`);
@@ -83,6 +89,8 @@ export function add_item(store, key, value) {
     cache[store][cache[store].tail].prev = null;
     delete cache[store][old_tail];
   }
+  console.log("Item added, peep the cache");
+  console.dir(cache);
 }
 
 // Getn a node from the cache

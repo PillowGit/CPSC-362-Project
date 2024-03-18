@@ -1,18 +1,24 @@
-import { properAuth } from '$lib/server/utils/exists';
-import makeAuth from '$lib/server/utils/makeAuth';
+import { getUserData } from '$lib/server/utils/get';
 
 export async function load({ params, cookies }) {
   // Get users stored authorized accounts
   const auth_cookie = cookies.get('auth');
-  // If user never authorized, go to login page
-  if (auth_cookie == undefined || params.username == "NULL") {
-    return {error: "Error: You do not have permission to view this page"};
+  // Get user data corresponding to the auth cookie
+  let user_data = null;
+  if (params.username == "NULL") {
+    user_data = { error: null, result: null };
+  } else { 
+    user_data = await getUserData(auth_cookie);
   }
-  // Ensure user is authorized to view page
-  const isAuthorized = await properAuth(params.username, auth_cookie);
-  if (isAuthorized.error !== null || !isAuthorized.result) {
-    return {error: "Error: You do not have permission to view this page"};
-  }
-  // If all checks passed, user is ok to view
-  return {};
+  // If there is an error, it's a db error
+  if (user_data.error !== null) { return { error: "Failed to fetch data from database" } }
+  // If there is no data associated with users auth, let's just say they don't have access to this page
+  if (user_data.result == null) { return { error: "Error: You do not have access to this page" } }
+  // If there is authorized user data, but their login datas username doesn't match the url, they don't have access
+  if (user_data.result.username != params.username) { return { error: "Error: You do not have access to this page" } }
+  // If all checks pass, they can see data
+  let ret = user_data.result;
+  delete ret.password;
+  delete ret.auth;
+  return { error: null, user: ret };
 }
