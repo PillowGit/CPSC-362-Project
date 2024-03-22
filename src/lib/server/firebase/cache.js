@@ -89,8 +89,6 @@ export function add_item(store, key, value) {
     cache[store][cache[store].tail].prev = null;
     delete cache[store][old_tail];
   }
-  console.log("Item added, peep the cache");
-  console.dir(cache);
 }
 
 // Getn a node from the cache
