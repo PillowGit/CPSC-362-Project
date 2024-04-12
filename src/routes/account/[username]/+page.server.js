@@ -20,5 +20,9 @@ export async function load({ params, cookies }) {
   let ret = user_data.result;
   delete ret.password;
   delete ret.auth;
+
+  // Fetch data for lists to display for users
+
+
   return { error: null, user: ret };
 }
