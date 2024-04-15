@@ -104,3 +104,23 @@ export function get_item(store, key) {
   delete ret.prev;
   return ret;
 }
+
+export function remove_item(store, key) {
+  if (cache[store] === undefined) {
+    throw new Error(`Attempt to remove from non-existent section: ${store}`);
+  } else if (cache[store][key] === undefined) {
+    throw new Error(`Attempt to remove non-existent key: ${key}`);
+  }
+  const old_left = cache[store][key].prev;
+  const old_right = cache[store][key].next;
+  if (cache[store].head === key) {
+    cache[store].head = old_right;
+  }
+  if (cache[store].tail === key) {
+    cache[store].tail = old_left;
+  }
+  cache[store][old_left].next = old_right;
+  cache[store][old_right].prev = old_left;
+  delete cache[store][key];
+  cache[store].size--;
+}
