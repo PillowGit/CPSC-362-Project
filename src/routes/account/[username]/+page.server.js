@@ -22,10 +22,7 @@ export async function load({ params, cookies }) {
   delete ret.auth;
 
   // Fetch data for lists to display for users
-  console.dir(ret, { depth: null });
   const res = await getLists(ret.lists);
-  console.dir(res, { depth: null });
 
-
-  return { error: null, user: ret };
+  return { error: null, username: ret.username, lists: res };
 }
