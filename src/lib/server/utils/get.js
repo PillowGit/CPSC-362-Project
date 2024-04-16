@@ -76,3 +76,56 @@ export async function getUserData(auth) {
   return result;
 
 }
+
+export async function getLists(ids) {
+  // Open the document to read ids from incase they aren't cached
+  let doc = await getDocument("userdata", "lists");
+  // Store all the gotten lists
+  const lists = {};
+  for (let i = 0; i < ids.length; i++) {
+    const fetch_result = await getList(ids[i], doc);
+    delete fetch_result.result.entries;
+    if (fetch_result.error === null) {
+      lists[ids[i]] = fetch_result.result;
+    }
+  }
+  return lists;
+}
+
+async function getList(id, doc) {
+  let result = { result: null, error: null };
+  // Attempt to access cache
+  try {
+    result.result = get_item("lists", id);
+  } catch (error) {
+    result.error = error;
+  }
+  // List was in cache and we can return it
+  if (result.error === null && result.result !== null) {
+    return result;
+  }
+  // Clear unnecessary error
+  result.error = null;
+  // Fetch database to find the list
+  const sheet = doc;
+  // Error fetching database
+  if (sheet.error !== null) {
+    result.error = sheet.error;
+    return result;
+  }
+  // List was not in database
+  if (sheet.result.data[id] === undefined) {
+    result.result = null;
+    return result;
+  }
+  // Attempt to add to cache
+  try {
+    add_item("lists", id, sheet.result.data[id]);
+  } catch (e) {
+    const msg = e.toString();
+  }
+  // Return list
+  result.result = sheet.result.data[id];
+  result.error = null;
+  return result;
+}

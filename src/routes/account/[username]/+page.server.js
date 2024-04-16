@@ -1,4 +1,4 @@
-import { getUserData } from '$lib/server/utils/get';
+import { getUserData, getLists } from '$lib/server/utils/get';
 
 export async function load({ params, cookies }) {
   // Get users stored authorized accounts
@@ -20,5 +20,9 @@ export async function load({ params, cookies }) {
   let ret = user_data.result;
   delete ret.password;
   delete ret.auth;
-  return { error: null, user: ret };
+
+  // Fetch data for lists to display for users
+  const res = await getLists(ret.lists);
+
+  return { error: null, username: ret.username, lists: res };
 }
