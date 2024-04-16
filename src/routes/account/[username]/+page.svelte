@@ -4,7 +4,6 @@
     import PageColor from '$lib/pagecolor.svelte';
     // Get data from server load
     export let data;
-    console.dir(data);
 </script>
 
 <PageColor />

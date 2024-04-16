@@ -78,9 +78,21 @@ export async function getUserData(auth) {
 }
 
 export async function getLists(ids) {
-
+  // Open the document to read ids from incase they aren't cached
+  let doc = await getDocument("userdata", "lists");
+  // Store all the gotten lists
+  const lists = {};
+  for (let i = 0; i < ids.length; i++) {
+    const fetch_result = await getList(ids[i], doc);
+    delete fetch_result.result.entries;
+    if (fetch_result.error === null) {
+      lists[ids[i]] = fetch_result.result;
+    }
+  }
+  return lists;
 }
-export async function getList(id) {
+
+async function getList(id, doc) {
   let result = { result: null, error: null };
   // Attempt to access cache
   try {
@@ -95,7 +107,7 @@ export async function getList(id) {
   // Clear unnecessary error
   result.error = null;
   // Fetch database to find the list
-  const sheet = await getDocument("userdata", "lists");
+  const sheet = doc;
   // Error fetching database
   if (sheet.error !== null) {
     result.error = sheet.error;
