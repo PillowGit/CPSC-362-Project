@@ -39,10 +39,12 @@
 <div class="lists-container">
     {#each Object.keys(data.lists) as list_id}
     <div class="list-box">
+    <a href={"/list/"+list_id}>
     <div class="list-container">
         <h3>{data.lists[list_id].listname}</h3>
         <p>{data.lists[list_id].description}</p>
     </div>
+    </a>
     </div>
     {/each}
 </div>
@@ -142,5 +144,9 @@
         margin-bottom: 1.5rem;
         margin-left: 1.5rem;
         margin-right: 1.5rem;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
     }
 </style>
