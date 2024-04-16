@@ -7,6 +7,11 @@
 
     console.dir("Page receieved the following data:\n");
     console.dir(data, { depth: null });
+
+
+    function onclikcnewlist() {
+
+    }
 </script>
 
 <PageColor />
@@ -22,9 +27,14 @@
     Welcome, {data.username}!
 </h1>
 <div class="lists-display">
+<div class="header">
 <h1>
     Your To-do Lists:
 </h1>
+<button class="newlistbutton">
+    + New List
+</button>
+</div>
 <div class="sep"></div>
 <div class="lists-container">
     {#each Object.keys(data.lists) as list_id}
@@ -63,9 +73,6 @@
         align-items: center;
         flex-direction: column;
     }
-    .lists-display h1 {
-        width: 80%;
-    }
     .sep {
         background-color: rgb(236, 239, 244);
         background-color: rgba(236, 239, 244, 0.4);
@@ -76,11 +83,33 @@
     .lists-container {
         width: 80%;
         margin-top: 2rem;
-
         display: flex;
         flex-wrap: wrap;
         justify-content: space-evenly;
         flex-direction: row;
+    }
+    .header {
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .header h1 {
+        width: 30%;
+    }
+    .newlistbutton {
+        background-color: #2E3440;
+        border-style: solid;
+        border-width: .3rem;
+        border-radius: 4px;
+        border-color: #3B4252;
+        cursor: pointer;
+        width: 12rem;
+        height: 75%;
+        margin-top: 1rem;
+        font-size: 2rem;
+        text-align: center;
+        color: #ECEFF4;
     }
     .list-box {
         background-color: #3B4252;
