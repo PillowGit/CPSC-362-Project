@@ -1,4 +1,5 @@
 <script>
+    import { redirect } from '@sveltejs/kit';
     const navleft = [
         {
             name: "Home",
@@ -21,6 +22,10 @@
             alt: "Source Code",
         },
     ];
+    async function logoutaction() {
+        await fetch("/logout", {method: "POST", headers: {'x-sveltekit-action': 'true'}, body: "{}"});
+        window.location.href = "/login"; 
+    }
 </script>
 
 <header class="container">
@@ -38,9 +43,13 @@
     </div>
     <div class="rightdisplay">
         {#each navright.entries() as [index, item]}
+            {#if item.name === "logout"}
+            <img src={item.src} alt={item.alt} class="item" on:click={logoutaction}/>
+            {:else}
             <a href={item.href}>
             <img src={item.src} alt={item.alt} class="item"/>
             </a>
+            {/if}
             {#if index < navright.length - 1}
                 <div class="divider"></div>
             {/if}
@@ -99,6 +108,11 @@
         filter: invert(1);
         margin-left: 0;
         margin-right: 0;
+    }
+    .item:hover {
+        -webkit-filter: invert(0.75);
+        filter: invert(0.75);
+        cursor: pointer;
     }
     /* The silly little dividers */
     .divider {
