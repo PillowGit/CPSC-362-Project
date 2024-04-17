@@ -78,8 +78,8 @@
             <h3>{entry.title}</h3>
             <div class="list-entry-title-buttons">
                 <!-- Reorder and delete buttons -->
-                <img src="/images/reorder.svg" alt="Reorder">
-                <img src="/images/trash.svg" alt="Delete">
+                <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" />
+                <img src="/images/trash.svg" alt="Delete" class="trash-button" />
             </div>
         </div>
         <!-- Description of the task -->
@@ -200,12 +200,29 @@
         flex-direction: row;
         align-items: center;
     }
-    .list-entry-title-buttons img {
+    .reorder-button {
         width: 1.5rem;
         height: 1.5rem;
         margin-left: 1rem;
         -webkit-filter: invert(1);
         filter: invert(1);
+    }
+    .reorder-button:hover {
+        cursor: pointer;
+        -webkit-filter: invert(0.5);
+        filter: invert(0.5);
+    }
+    .trash-button {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-left: 1rem;
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+    .trash-button:hover {
+        cursor: pointer;
+        -webkit-filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+        filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
     }
     .list-entry-description {
         width: 90%;
