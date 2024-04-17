@@ -26,3 +26,16 @@ export async function load({ params, cookies }) {
 
   return { error: null, username: ret.username, lists: res };
 }
+// Handle list creation
+export const actions = {
+    create: async({ request }) => {
+      // Get data from form submission
+      const data = await request.formData();
+      // Grab the name of the list and the description entered
+      const listname = data.get("listname")?.toString();
+      const description = data.get("description")?.toString();
+  
+      // debug info
+      console.log(`----------Form submission----------\n\nName of List:\n${listname}\n\nDescription given:\n${description}\n\n-----------------------------------`);
+    }
+  }
