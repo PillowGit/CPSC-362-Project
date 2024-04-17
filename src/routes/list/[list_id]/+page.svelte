@@ -43,6 +43,28 @@
         title = title.slice(0, 100); // 100 chars max for task titles
         description = description.slice(0, 500); // 500 chars max for task descriptions
     }
+
+    // Define function to delete a task
+    async function delete_task(section, title) {
+        const body = {
+            "title": title,
+            "section": section,
+        }
+        const response = await fetch("?/delete", {
+            method: 'POST',
+            headers: {
+                'x-sveltekit-action': 'true',
+            },
+            body: JSON.stringify(body),
+        });
+        // Handle action error
+        if (response.status === 500) {
+            alert("Failed to delete task.");
+            return;
+        }
+        // Remove task from list locally
+        organized_entries[section] = organized_entries[section].filter((entry) => entry.title !== title);
+    }
 </script>
 
 <!-- Default page imports (header, page format, etc) -->
@@ -79,7 +101,7 @@
             <div class="list-entry-title-buttons">
                 <!-- Reorder and delete buttons -->
                 <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" />
-                <img src="/images/trash.svg" alt="Delete" class="trash-button" />
+                <img src="/images/trash.svg" alt="Delete" class="trash-button" on:click={async () => await delete_task(section, entry.title)}/>
             </div>
         </div>
         <!-- Description of the task -->
@@ -113,7 +135,7 @@
     <textarea class="mg-bottom" name="description" bind:value={description} placeholder="Description..." />
 
     <div class="place-end">
-        <button type="submit">Add Task</button>
+        <button type="submit" class="create">Add Task</button>
     </div>
 </form>
 <div

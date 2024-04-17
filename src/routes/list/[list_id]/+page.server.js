@@ -1,7 +1,7 @@
 import { getUserFromAuth, getLists } from '$lib/server/utils/get';
 import { remove_item } from '$lib/server/firebase/cache';
 import addData from '$lib/server/firebase/addData';
-import { fail } from '@sveltejs/kit';
+import { fail, json } from '@sveltejs/kit';
 
 
 export async function load({ params, cookies }) {
@@ -76,9 +76,38 @@ export const actions = {
                 entries: entries
             }
         });
-        console.dir(db_res, {depth: null});
         if (db_res.error !== null) {
             return fail(400, {"errors": ["Failed to update list data in database"]});
         }
-    }
+    },
+    delete: async({ request, params }) => {
+        // Get data from form submission
+        const req_data = await request.json();
+        const title = req_data.title;
+        const section = req_data.section;
+        // Get the list associated with this page
+        const list_id = params.list_id;
+        let entries = (await getLists([list_id]))[list_id];
+        if (entries === undefined) {
+            return fail(400, {"errors": ["Failed to fetch data from database"]});
+        }
+        entries = entries.entries;
+        // Now remove the task from the list
+        entries = entries.filter((entry) => entry.title !== title);
+        // Remove list data from our cache for update
+        try {
+            await remove_item("lists", list_id);
+        } catch (error) {
+            return fail(400, {"errors": ["Failed to remove list data from cache"]});
+        }
+        // Update the list in the database
+        const db_res = await addData("userdata", "lists", {
+            [params.list_id]: {
+                entries: entries
+            }
+        });
+        if (db_res.error !== null) {
+            throw new Error("Failed to update list data in database");
+        }
+    },
 }
