@@ -61,4 +61,7 @@
         text-align: center;
         color: #ECEFF4;
     }
+    .loginbutton:hover {
+        background-color: #434C5E;
+    }
 </style>

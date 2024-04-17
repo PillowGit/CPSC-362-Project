@@ -36,14 +36,14 @@
 <div class="sep"></div>
 <div class="lists-container">
     {#each Object.keys(data.lists) as list_id}
-    <div class="list-box">
     <a href={"/list/"+list_id}>
+    <div class="list-box">
     <div class="list-container">
         <h3>{data.lists[list_id].listname}</h3>
         <p>{data.lists[list_id].description}</p>
     </div>
-    </a>
     </div>
+    </a>
     {/each}
 </div>
 </div>
@@ -110,6 +110,9 @@
         text-align: center;
         color: #ECEFF4;
     }
+    .newlistbutton:hover {
+        background-color: #434C5E;
+    }
     .list-box {
         background-color: #3B4252;
         border-radius: 1.5rem;
@@ -118,6 +121,10 @@
         margin-bottom: 4rem;
         display: flex;
         justify-content: center;
+        transition: 0.25s;
+    }
+    .list-box:hover {
+        background-color: #434C5E;
     }
     .list-container {
         display: flex;

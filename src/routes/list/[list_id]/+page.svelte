@@ -294,6 +294,9 @@
         text-align: center;
         color: #ECEFF4;
     }
+    .newtaskbutton button:hover {
+        background-color: #434C5E;
+    }
     .title {
         font-size: 2.5rem;
         text-align: center;

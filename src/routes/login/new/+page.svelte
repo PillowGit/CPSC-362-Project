@@ -122,6 +122,10 @@
         color: rgb(167, 169, 173);
         color: rgba(167, 169, 173, 0.8);
     }
+    .createacc a:hover {
+        color: rgb(236, 239, 244);
+        color: rgba(236, 239, 244, 0.8);
+    }
     /* Format the eye that allows to see the password */
     .eye {
         -webkit-filter: invert(1);
@@ -130,6 +134,11 @@
         width: 2rem;
         margin-top: -5.1rem;
         justify-self: right;
+        transition: 0.1s
+    }
+    .eye:hover {
+        -webkit-filter: invert(0.5);
+        filter: invert(0.5);
     }
     /* Style every form entry into a grid */
     .formitems {
@@ -191,6 +200,10 @@
         font-size: 2rem;
         color: #ECEFF4;
         justify-self: center;
+        transition: 0.25s;
+    }
+    .submitbutton:hover {
+        background-color: #434C5E;
     }
     /* Finally, style the error message */
     .formstatus {
