@@ -88,13 +88,14 @@
         //alert(`Opening menu for "${section}-${title}" at ${mousepos.x}, ${mousepos.y}`);
     }
     async function reorder(to) {
-        // Add the task to the new section
-        organized_entries[to].push(organized_entries[latest_menu.section].find((entry) => entry.title === latest_menu.title));
+        if (latest_menu.section === to) { return; }
         // Remove task from old section
         organized_entries[latest_menu.section] = organized_entries[latest_menu.section].filter((entry) => entry.title !== latest_menu.title);
+        // Add the task to the new section
+        organized_entries[to].push(organized_entries[latest_menu.section].find((entry) => entry.title === latest_menu.title));
         // Sort both sections
-        organized_entries[to].sort((a, b) => datetoint(a.date) - datetoint(b.date));
         organized_entries[latest_menu.section].sort((a, b) => datetoint(a.date) - datetoint(b.date));
+        organized_entries[to].sort((a, b) => datetoint(a.date) - datetoint(b.date));
     }
 </script>
 
