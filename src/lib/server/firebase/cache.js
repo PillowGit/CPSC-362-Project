@@ -99,9 +99,11 @@ export function get_item(store, key) {
     throw new Error(`Attempt to get non-existent key: ${key}`);
   }
   update(store, key);
-  let ret = cache[store][key];
-  delete ret.next;
-  delete ret.prev;
+  let ret = {};
+  for (let i in cache[store][key]) {
+    if (i === "next" || i === "prev") continue;
+    ret[i] = cache[store][key][i];
+  }
   return ret;
 }
 
@@ -111,16 +113,27 @@ export function remove_item(store, key) {
   } else if (cache[store][key] === undefined) {
     throw new Error(`Attempt to remove non-existent key: ${key}`);
   }
-  const old_left = cache[store][key].prev;
-  const old_right = cache[store][key].next;
-  if (cache[store].head === key) {
-    cache[store].head = old_right;
+  // Remove from dll
+  const old_prev = cache[store][key].prev;
+  const old_next = cache[store][key].next;
+
+  if (key === cache[store].tail) {
+    cache[store].tail = old_next;
+    cache[store][old_next].prev = null;
+    cache[store].size--;
+    delete cache[store][key];
+    return;
   }
-  if (cache[store].tail === key) {
-    cache[store].tail = old_left;
+  if (key === cache[store].head) {
+    cache[store].head = old_prev;
+    cache[store][old_prev].next = null;
+    cache[store].size--;
+    delete cache[store][key];
+    return;
   }
-  cache[store][old_left].next = old_right;
-  cache[store][old_right].prev = old_left;
-  delete cache[store][key];
+  cache[store][old_prev].next = old_next;
+  cache[store][old_next].prev = old_prev;
   cache[store].size--;
+  delete cache[store][key];
+  return;
 }

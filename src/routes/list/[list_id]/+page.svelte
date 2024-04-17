@@ -138,8 +138,8 @@
         border-color: #3B4252;
         cursor: pointer;
         width: 12rem;
-        height: 75%;
-        margin-top: 0.5rem;
+        height: 50%;
+        margin-top: 1rem;
         margin-left: 1rem;
         font-size: 2rem;
         text-align: center;

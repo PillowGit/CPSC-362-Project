@@ -84,8 +84,8 @@ export async function getLists(ids) {
   const lists = {};
   for (let i = 0; i < ids.length; i++) {
     const fetch_result = await getList(ids[i], doc);
-    delete fetch_result.result.entries;
-    if (fetch_result.error === null) {
+    if (fetch_result.error === null && fetch_result.result !== null) {
+      delete fetch_result.result.entries;
       lists[ids[i]] = fetch_result.result;
     }
   }
