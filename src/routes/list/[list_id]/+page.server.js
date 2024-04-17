@@ -49,7 +49,6 @@ export const actions = {
             return fail(400, {"errors": ["Failed to fetch data from database"]});
         }
         entries = entries.entries;
-        console.log(date);
         // Ensure our task is not already in the list
         for (let i = 0; i < entries.length; i++) {
             if (entries[i].title === taskname) {

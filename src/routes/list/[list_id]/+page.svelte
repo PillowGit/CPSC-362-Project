@@ -180,6 +180,7 @@
         <input name="taskname" type="text" bind:value={title} placeholder="Title..."/>
     </div>
 
+    <label for="date">Due Date</label>
     <input type="date" class="mg-bottom" name="date"/>
 
     <label for="listname">Description ({description.length}/500)</label>

@@ -7,6 +7,12 @@
             src: "/images/home.svg",
             alt: "Home Button",
         }, 
+        {
+            name: "Account",
+            href: "/account",
+            src: "/images/account.svg",
+            alt: "Account Button",
+        },
     ];
     const navright = [
         {
@@ -89,7 +95,7 @@
         display: grid;
         grid-template-rows: 3rem;
         justify-content: start;
-        grid-template-columns: repeat(1, 3rem 1.5rem);
+        grid-template-columns: repeat(2, 3rem 1.5rem);
     }
     /* Right Side display */
     .rightdisplay {
