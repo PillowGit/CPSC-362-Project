@@ -107,13 +107,11 @@
             alert("Failed to move task.");
             return;
         }
-        // Move the task on the frontend on success
-        // Remove task from list locally
-        organized_entries[section] = organized_entries[section].filter((entry) => entry.title !== title);
         // Remove task from old section
+        const old_section_info = organized_entries[latest_menu.section].filter((entry) => entry.title === latest_menu.title)[0];
         organized_entries[latest_menu.section] = organized_entries[latest_menu.section].filter((entry) => entry.title !== latest_menu.title);
         // Add the task to the new section
-        organized_entries[to].push(organized_entries[latest_menu.section].find((entry) => entry.title === latest_menu.title));
+        organized_entries[to].push(old_section_info);
         // Sort both sections
         organized_entries[latest_menu.section].sort((a, b) => datetoint(a.date) - datetoint(b.date));
         organized_entries[to].sort((a, b) => datetoint(a.date) - datetoint(b.date));

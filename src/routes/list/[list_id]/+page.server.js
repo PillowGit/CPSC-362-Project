@@ -125,7 +125,7 @@ export const actions = {
         // Now change it's section
         for (let i = 0; i < entries.length; i++) {
             if (entries[i].title === title) {
-                entries[i].section = section;
+                entries[i].status = section;
                 break;
             }
         }
