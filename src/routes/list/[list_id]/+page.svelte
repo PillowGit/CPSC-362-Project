@@ -65,6 +65,37 @@
         // Remove task from list locally
         organized_entries[section] = organized_entries[section].filter((entry) => entry.title !== title);
     }
+
+    // Define function to open a dropdown menu for people to reorder tasks
+    let mousepos = { x: 0, y: 0 };
+    let latest_menu = { section: "", title: "" };
+    let showdropdown = false;
+    function handleMousemove(e) {
+        mousepos.x = e.clientX;
+        mousepos.y = e.clientY;
+        const dropdown = document.querySelector(".section-dropdown");
+        dropdown.style.left = `${mousepos.x}px`;
+        dropdown.style.top = `${mousepos.y}px`;
+    }
+    function open_dropdown(section, title) {
+        latest_menu.section = section;
+        latest_menu.title = title;
+        // Move the div to the mouse position
+        const dropdown = document.querySelector(".section-dropdown");
+        dropdown.style.left = `${mousepos.x}px`;
+        dropdown.style.top = `${mousepos.y}px`;
+        showdropdown = true;
+        //alert(`Opening menu for "${section}-${title}" at ${mousepos.x}, ${mousepos.y}`);
+    }
+    async function reorder(to) {
+        // Add the task to the new section
+        organized_entries[to].push(organized_entries[latest_menu.section].find((entry) => entry.title === latest_menu.title));
+        // Remove task from old section
+        organized_entries[latest_menu.section] = organized_entries[latest_menu.section].filter((entry) => entry.title !== latest_menu.title);
+        // Sort both sections
+        organized_entries[to].sort((a, b) => datetoint(a.date) - datetoint(b.date));
+        organized_entries[latest_menu.section].sort((a, b) => datetoint(a.date) - datetoint(b.date));
+    }
 </script>
 
 <!-- Default page imports (header, page format, etc) -->
@@ -86,7 +117,7 @@
 </div>
 </div>
 
-<main>
+<main on:mousemove={handleMousemove}>
 {#each ["todo", "divider", "inprogress", "divider", "completed", "divider", "dropped"] as section}
 {#if section == "divider"}
     <div class="section-divider"></div>
@@ -100,7 +131,7 @@
             <h3>{entry.title}</h3>
             <div class="list-entry-title-buttons">
                 <!-- Reorder and delete buttons -->
-                <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" />
+                <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" on:click={() => open_dropdown(section, entry.title)}/>
                 <img src="/images/trash.svg" alt="Delete" class="trash-button" on:click={async () => await delete_task(section, entry.title)}/>
             </div>
         </div>
@@ -147,9 +178,96 @@
     aria-pressed="false"
     tabindex="0"
 />
+<div class="section-dropdown" class:active={showdropdown}>
+{#each ["todo", "d", "inprogress", "d", "completed", "d", "dropped"] as section}
+{#if section == "d"}
+    <div class="dropdown-divider"></div>
+{:else}
+<div class="dropdown-section" on:click={async () => {await reorder(section); showdropdown = false;}}>
+    <p>{titles[section]}</p>
+</div>
+{/if}
+{/each}
+</div>
+<div
+    class="dropdown-window-overlay"
+    class:active={showdropdown}
+    on:click={() => showdropdown = false}
+    on:keydown={() => showdropdown = false}
+    role="button"
+    aria-pressed="false"
+    tabindex="0"
+/>
 {/if}
 
 <style>
+    .section-dropdown {
+        width: 10rem;
+        opacity: 0;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        background-color: #3B4252;
+        border: 0.15rem solid color-mix(in srgb, #2E3440 50%, #D8DEE9 50%);
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        visibility: hidden;
+        transition: 0.25s;
+    }
+    .section-dropdown.active {
+        visibility: visible;
+        z-index: 1002;
+        opacity: 1;
+    }
+    .dropdown-divider {
+        border: 0.05rem solid color-mix(in srgb, #2E3440 50%, #D8DEE9 50%);
+        width: 90%;
+    }
+    .dropdown-section {
+        border-radius: 1rem;
+        height: 3rem;
+        text-align: center;
+        width: 100%;
+    }
+    .dropdown-section:hover {
+        cursor: pointer;
+        background-color: #434C5E;
+    }
+    /*
+    .full-window-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(213, 213, 213, 0.25);
+		z-index: 1001;
+		transition: 0.25s;
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.full-window-overlay.active {
+		opacity: 1;
+		visibility: visible;
+	}
+    */
+    .dropdown-window-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1001;
+        transition: 0.25s;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .dropdown-window-overlay.active {
+        visibility: visible;
+    }
     .titlecard {
         margin-top: 5%;
         min-height: 7.5rem;
