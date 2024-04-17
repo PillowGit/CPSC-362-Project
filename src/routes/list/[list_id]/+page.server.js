@@ -89,7 +89,7 @@ export const actions = {
         const list_id = params.list_id;
         let entries = (await getLists([list_id]))[list_id];
         if (entries === undefined) {
-            return fail(400, {"errors": ["Failed to fetch data from database"]});
+            throw new Error("Failed to update list data in database");
         }
         entries = entries.entries;
         // Now remove the task from the list
@@ -98,7 +98,42 @@ export const actions = {
         try {
             await remove_item("lists", list_id);
         } catch (error) {
-            return fail(400, {"errors": ["Failed to remove list data from cache"]});
+            throw new Error("Failed to update list data in database");
+        }
+        // Update the list in the database
+        const db_res = await addData("userdata", "lists", {
+            [params.list_id]: {
+                entries: entries
+            }
+        });
+        if (db_res.error !== null) {
+            throw new Error("Failed to update list data in database");
+        }
+    },
+    reorder: async({ request, params }) => {
+        // Get data from form submission
+        const req_data = await request.json();
+        const title = req_data.title;
+        const section = req_data.section;
+        // Get the list associated with this page
+        const list_id = params.list_id;
+        let entries = (await getLists([list_id]))[list_id];
+        if (entries === undefined) {
+            throw new Error("Failed to update list data in database");
+        }
+        entries = entries.entries;
+        // Now change it's section
+        for (let i = 0; i < entries.length; i++) {
+            if (entries[i].title === title) {
+                entries[i].section = section;
+                break;
+            }
+        }
+        // Remove list data from our cache for update
+        try {
+            await remove_item("lists", list_id);
+        } catch (error) {
+            throw new Error("Failed to update list data in database");
         }
         // Update the list in the database
         const db_res = await addData("userdata", "lists", {

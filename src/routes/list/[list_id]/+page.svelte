@@ -88,7 +88,28 @@
         //alert(`Opening menu for "${section}-${title}" at ${mousepos.x}, ${mousepos.y}`);
     }
     async function reorder(to) {
+        // If reordering to same section, do nothing
         if (latest_menu.section === to) { return; }
+        // Make request to page actions
+        const body = {
+            "title": latest_menu.title,
+            "section": to,
+        }
+        const response = await fetch("?/reorder", {
+            method: 'POST',
+            headers: {
+                'x-sveltekit-action': 'true',
+            },
+            body: JSON.stringify(body),
+        });
+        // Handle action error
+        if (response.status === 500) {
+            alert("Failed to move task.");
+            return;
+        }
+        // Move the task on the frontend on success
+        // Remove task from list locally
+        organized_entries[section] = organized_entries[section].filter((entry) => entry.title !== title);
         // Remove task from old section
         organized_entries[latest_menu.section] = organized_entries[latest_menu.section].filter((entry) => entry.title !== latest_menu.title);
         // Add the task to the new section
