@@ -1,56 +1,15 @@
 <script>
+    // Data Imports
     import Navbar from '$lib/navbar.svelte';
     import PageColor from '$lib/pagecolor.svelte';
+    export let form;
+    // {#if form?.success} let's us check for a statement `return { success: "data" }`
+    export let data;
+    if (data.entries === undefined) { data.entries = [] };
 
-    //export let data;
-    let data = {
-        listname: "Mark list",
-        entries: [
-            {
-                title: "This is a really really long title that will be much longer than the required titles for testing purposes",
-                description: "This is a task inside of a task inside of a task so that this is a description in a task where this is a task in some sample data thats hardcoded for this task in our project project entries hardcode mark mmm mkar hgnhhfnafdsa jakfld fjkasl  asdjfklsdafjdkfal",
-                status: "todo",
-                date: "2024-04-18",
-            },
-            {
-                title: "Math 350 Homework",
-                description: "Work on all of the back end shit :(",
-                status: "todo",
-                date: "2024-04-20",
-            },
-            {
-                title: "this should be a to do list entry that actually has two lines",
-                description: "Work on all of the back end shit :(",
-                status: "todo",
-                date: "2024-04-16",
-            },
-            {
-                title: "Make a todo-list",
-                description: "Work on all of the back end shit :(",
-                status: "inprogress",
-                date: "2024-04-16",
-            },
-            {
-                title: "Make a todo-list",
-                description: "Work on all of the back end shit :(",
-                status: "completed",
-                date: "2024-04-16",
-            },
-            {
-                title: "Make a todo-list",
-                description: "Work on all of the back end shit :(",
-                status: "dropped",
-                date: "2024-04-16",
-            },
-        ],
-    };
-    // Max 260 chars for description
-    // Max 
-
-    // Sort data by date
+    // Organize list data
     const datetoint = (date) => { return new Date(date).getTime(); }
     data.entries.sort((a, b) => datetoint(a.date) - datetoint(b.date));
-
     let todo = [];
     let inprogress = [];
     let completed = [];
@@ -75,14 +34,30 @@
     }
     const organized_entries = {"todo":todo, "inprogress":inprogress, "completed":completed, "dropped":dropped};
     const titles = {"todo":"To-Do", "inprogress":"In Progress", "completed":"Completed", "dropped":"Dropped"};
+    
+    // Necessary info for creating a new task
+    let isOpen = false;
+    let title = '';
+    let description = '';
+    $: {
+        title = title.slice(0, 100); // 100 chars max for task titles
+        description = description.slice(0, 500); // 500 chars max for task descriptions
+    }
 </script>
 
+<!-- Default page imports (header, page format, etc) -->
 <PageColor />
 <Navbar />
 
+<!-- Error handling -->
+{#if data?.error}
+<h1 class="errortext">{data.error}</h1>
+
+<!-- List Display -->
+{:else}
 <div class="titlecard">
 <div class="newtaskbutton">
-    <button>+ New Task</button>
+    <button on:click={() => isOpen = true}>+ New Task</button>
 </div>
 <div class="title">
     <h1>{data.listname}</h1>
@@ -122,12 +97,47 @@
 {/each}
 </main>
 
+<!-- Modal for creating new task -->
+<!-- form vars: "title", "description" -->
+<form class="create-list-card" class:active={isOpen} method="POST" action="?/create">
+    <h2 class="mg-bottom">Create a New Task</h2>
+
+    <div class="mg-bottom">
+        <label for="taskname" >Title ({title.length}/100)</label>
+        <input name="taskname" type="text" bind:value={title} placeholder="Title..."/>
+    </div>
+
+    <input type="date" class="mg-bottom" name="date"/>
+
+    <label for="listname">Description ({description.length}/500)</label>
+    <textarea class="mg-bottom" name="description" bind:value={description} placeholder="Description..." />
+
+    <div class="place-end">
+        <button type="submit">Add Task</button>
+    </div>
+</form>
+<div
+    class="full-window-overlay"
+    class:active={isOpen}
+    on:click={() => isOpen = false}
+    on:keydown={() => isOpen = false}
+    role="button"
+    aria-pressed="false"
+    tabindex="0"
+/>
+{/if}
+
 <style>
     .titlecard {
         margin-top: 5%;
-        height: 7.5rem;
+        min-height: 7.5rem;
         display: grid;
         grid-template-columns: 20% 60% 20%;
+    }
+    .newtaskbutton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .newtaskbutton button {
         height: inherit;
@@ -138,15 +148,13 @@
         border-color: #3B4252;
         cursor: pointer;
         width: 12rem;
-        height: 50%;
-        margin-top: 1rem;
+        height: 4rem;
         margin-left: 1rem;
         font-size: 2rem;
         text-align: center;
         color: #ECEFF4;
     }
     .title {
-        margin-top: -4%;
         font-size: 2.5rem;
         text-align: center;
         height: inherit;
@@ -209,4 +217,101 @@
         color: color-mix(in srgb, #D8DEE9 50%, transparent);
         font-size: 0.75rem;
     }
+    .errortext {
+        margin-top: 10rem;
+        text-align: center;
+        color: red;
+        font-size: 3rem;
+    }
+    /* Form Styling */
+    .create-list-card {
+		z-index: 1002;
+		position: fixed;
+		left: 50%;
+		top: 55%;
+		transform: translate(-50%, -50%);
+		display: grid;
+		flex-direction: column;
+		width: min(50em, 90vw);
+		padding: 2rem;
+		background-color: #3b4252;
+        border-radius: 2rem;
+        /* border: 2px solid white; */
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.125s ease-in;
+	}
+
+	.create-list-card.active {
+		top: 50%;
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.create-list-card .place-end {
+		justify-self: end;
+	}
+
+	.create-list-card .mg-bottom {
+		margin-block-end: 1rem;
+	}
+
+	.create-list-card h2 {
+		margin-block: 0;
+		font-size: 1.75rem;
+	}
+
+	.create-list-card textarea {
+		height: 10rem;
+		resize: none;
+	}
+
+	.create-list-card input[type='text'],
+    .create-list-card input[type='date'],
+	.create-list-card textarea {
+		background-color: #2e3440;
+		font-size: 1rem;
+		padding: 0.5rem 1rem;
+		outline: none;
+		border: none;
+        color: white;
+        font-family: inherit;
+        border-radius: 0.5rem;
+        width: 96%;
+	}
+
+	.create-list-card .create {
+		outline: none;
+		border: none;
+		cursor: pointer;
+		font-size: 1rem;
+		border-radius: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		background-color: white;
+		color: #3b4252;
+        font-weight: medium;
+		transition: all 0.2s ease-in;
+	}
+
+	.create-list-card .create:hover {
+		opacity: 0.7;
+	}
+
+    .full-window-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(213, 213, 213, 0.25);
+		z-index: 1001;
+		transition: 0.25s;
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.full-window-overlay.active {
+		opacity: 1;
+		visibility: visible;
+	}
 </style>

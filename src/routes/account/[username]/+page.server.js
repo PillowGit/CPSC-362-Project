@@ -1,5 +1,4 @@
 import { getUserData, getLists, getUserFromAuth, getLists } from '$lib/server/utils/get';
-import { add } from '$lib/server/utils/add';
 import { remove_item } from '$lib/server/firebase/cache';
 import addData from '$lib/server/firebase/addData';
 
@@ -26,6 +25,10 @@ export async function load({ params, cookies }) {
 
   // Fetch data for lists to display for users
   const res = await getLists(ret.lists);
+  for (let i = 0; i < ret.lists.length; i++) {
+    if (res[ret.lists[i]] === undefined) continue;
+    delete res[ret.lists[i]].entries;
+  }
 
   return { error: null, username: ret.username, lists: res };
 }
@@ -60,7 +63,7 @@ export const actions = {
       await remove_item("users", cookies.get('auth'));
       // Generate list to add to the database
       const list_database_entry = {};
-      list_database_entry.allowed_users = [username];
+      list_database_entry.allowed_users = [username.result];
       list_database_entry.description = description;
       list_database_entry.listname = listname;
       list_database_entry.entries = [];
