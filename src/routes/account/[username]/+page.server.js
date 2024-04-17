@@ -1,4 +1,4 @@
-import { getUserData, getLists, getUserFromAuth, getLists } from '$lib/server/utils/get';
+import { getUserData, getLists, getUserFromAuth } from '$lib/server/utils/get';
 import { remove_item } from '$lib/server/firebase/cache';
 import addData from '$lib/server/firebase/addData';
 

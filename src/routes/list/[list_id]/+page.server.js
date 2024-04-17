@@ -29,7 +29,7 @@ export async function load({ params, cookies }) {
 }
 
 export const actions = {
-    create: async({ request, cookies, params }) => {
+    create: async({ request, params }) => {
         // Get data from form submission
         const data = await request.formData();
         const date = data.get("date")?.toString();
