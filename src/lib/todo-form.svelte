@@ -1,12 +1,11 @@
 <script>
     export let isOpen = false;
     export let title = '';
-	export let description = '';
+		export let description = '';
     $: {
         title = title.slice(0,60);
         description = description.slice(0,500);
     }
-
 </script>
 
 <form class="create-list-card" class:active={isOpen} method="POST" action="?/create">

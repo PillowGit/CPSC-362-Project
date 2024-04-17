@@ -1,4 +1,5 @@
-import { getUserData, getLists } from '$lib/server/utils/get';
+import { getUserData, getLists, getUserFromAuth, getLists } from '$lib/server/utils/get';
+import { add } from '$lib/server/utils/add';
 
 export async function load({ params, cookies }) {
   // Get users stored authorized accounts
@@ -28,14 +29,21 @@ export async function load({ params, cookies }) {
 }
 // Handle list creation
 export const actions = {
-    create: async({ request }) => {
+    create: async({ request, cookies }) => {
       // Get data from form submission
       const data = await request.formData();
       // Grab the name of the list and the description entered
       const listname = data.get("listname")?.toString();
       const description = data.get("description")?.toString();
-  
-      // debug info
-      console.log(`----------Form submission----------\n\nName of List:\n${listname}\n\nDescription given:\n${description}\n\n-----------------------------------`);
+      // Determine the new lists potential id
+      const username = await getUserFromAuth(cookies.get('auth'));
+      if (username.error !== null) return;
+      const new_id = username.result + '-' + listname;
+      // Check if a list with this id already exists
+      const list_exists = (await getLists([new_id]))[new_id] !== undefined;
+      if (list_exists) return;
+
+      // Add the list id to the users lists
+      const add_status = await add("users", username.result, { lists: [new_id] });
     }
   }

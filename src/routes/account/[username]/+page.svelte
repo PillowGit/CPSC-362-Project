@@ -3,21 +3,13 @@
     import Navbar from '$lib/navbar.svelte';
     import PageColor from '$lib/pagecolor.svelte';
 	import TodoForm from '$lib/todo-form.svelte';
-    // Get data from server load
     export let data;
-
 
     let isOpen = false;
     let title = '';
 	let description = '';
-
     $: titleCharacterCount = title.length
     $: descCharCount = description.length
-
-
-    function onclikcnewlist() {
-
-    }
 </script>
 
 <PageColor />
@@ -56,31 +48,10 @@
 </div>
 </div>
 </div>
-
 <TodoForm bind:isOpen title={title} description={description} />
-
-
-
 {/if}
 
 <style>
-    /* Used for things like "no access" or "failed to load data" */
-    /* .create-list-card {
-		z-index: 10;
-		position: fixed;
-		left: 50%;
-		top: 55%;
-		transform: translate(-50%, -50%);
-		display: grid;
-		flex-direction: column;
-		width: min(50em, 90vw);
-		padding: 2rem;
-		background-color: var(--acm-light);
-		opacity: 0;
-		visibility: visible;
-		transition: all 0.125s ease-in;
-	} */
-
     .errortext {
         color: red;
         text-align: center;
