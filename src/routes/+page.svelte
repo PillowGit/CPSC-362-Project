@@ -13,7 +13,7 @@
     <img src="images/todo-list.png" alt="Logo" class="logo"/>
     <!-- Title text -->
     <h1 class="title">
-        360 Todo
+        360 Two-Do
         <br>
     </h1>
     <!-- Login button -->
