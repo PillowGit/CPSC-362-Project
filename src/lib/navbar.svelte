@@ -1,5 +1,18 @@
 <script>
     import { redirect } from '@sveltejs/kit';
+    async function logoutaction() {
+        await fetch("/logout", {method: "POST", headers: {'x-sveltekit-action': 'true'}, body: "{}"});
+        window.location.href = "/login"; 
+    }
+    async function accountaction() {
+        const resp = await fetch("/account", {method: "POST", headers: {'x-sveltekit-action': 'true'}, body: "{}"});
+        const destination = (await resp.json()).data.slice(2, -2);
+        if (destination === "err") {
+            alert("There was an error with your login");
+        } else {
+            window.location.href = destination;
+        }
+    }
     const navleft = [
         {
             name: "Home",
@@ -12,6 +25,7 @@
             href: "/account",
             src: "/images/account.svg",
             alt: "Account Button",
+            routine: accountaction,
         },
     ];
     const navright = [
@@ -20,6 +34,7 @@
             href: "/logout",
             src: "/images/logout.svg",
             alt: "Logout Button",
+            routine: logoutaction,
         },
         {
             name: "code",
@@ -28,10 +43,6 @@
             alt: "Source Code",
         },
     ];
-    async function logoutaction() {
-        await fetch("/logout", {method: "POST", headers: {'x-sveltekit-action': 'true'}, body: "{}"});
-        window.location.href = "/login"; 
-    }
 </script>
 
 <header class="container">
@@ -39,9 +50,13 @@
     <div></div>
     <div class="leftdisplay">
         {#each navleft.entries() as [index, item]}
+            {#if item.routine !== undefined}
+            <img src={item.src} alt={item.alt} class="item" on:click={item.routine}/>
+            {:else}
             <a href={item.href}>
             <img src={item.src} alt={item.alt} class="item"/>
             </a>
+            {/if}
             {#if index < navleft.length - 1}
                 <div class="divider"></div>
             {/if}
@@ -49,8 +64,8 @@
     </div>
     <div class="rightdisplay">
         {#each navright.entries() as [index, item]}
-            {#if item.name === "logout"}
-            <img src={item.src} alt={item.alt} class="item" on:click={logoutaction}/>
+            {#if item.routine !== undefined}
+            <img src={item.src} alt={item.alt} class="item" on:click={item.routine}/>
             {:else}
             <a href={item.href}>
             <img src={item.src} alt={item.alt} class="item"/>

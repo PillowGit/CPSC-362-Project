@@ -9,3 +9,19 @@ export async function load({ cookies }) {
     }
     redirect(302, "/account/NULL");
 }
+
+export const actions = {
+  default: async({ cookies }) => {
+    const auth = cookies.get('auth');
+    if (auth === undefined) {
+        return "/login";
+    } else {
+        const user = await getUserFromAuth(auth);
+        if (user.result !== null) {
+            return "/account/" + user.result;
+        } else {
+            return "err";
+        }
+    }
+  }
+}
