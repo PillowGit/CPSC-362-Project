@@ -44,6 +44,37 @@
         description = description.slice(0, 500); // 500 chars max for task descriptions
     }
 
+    // Necessary js for editing a task
+    let isEditing = false;
+    let old_title = '';
+    let edit_title = '';
+    let edit_description = '';
+    let edit_date = '';
+    function open_edit(old_t, old_d, old_da) {
+        old_title = old_t;
+        edit_title = old_t;
+        edit_description = old_d;
+        edit_date = old_da;
+        isEditing = true;
+    }
+    async function finish_edit() {
+        isEditing = false;
+        const body = {
+            "old_title": old_title,
+            "edit_title": edit_title,
+            "edit_description": edit_description,
+            "edit_date": edit_date,
+        }
+        const response = await fetch("?/edit", {
+            method: 'POST',
+            headers: {
+                'x-sveltekit-action': 'true',
+            },
+            body: JSON.stringify(body),
+        });
+        alert("done, with response code", response.status);
+    }
+
     // Define function to delete a task
     async function delete_task(section, title) {
         const body = {
@@ -151,6 +182,7 @@
             <h3>{entry.title}</h3>
             <div class="list-entry-title-buttons">
                 <!-- Reorder and delete buttons -->
+                <img src="/images/edit.svg" alt="Edit" class="edit-button" on:click={() => open_edit(entry.title, entry.description, entry.date)}/>
                 <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" on:click={() => open_dropdown(section, entry.title)}/>
                 <img src="/images/trash.svg" alt="Delete" class="trash-button" on:click={async () => await delete_task(section, entry.title)}/>
             </div>
@@ -170,8 +202,7 @@
 {/each}
 </main>
 
-<!-- Modal for creating new task -->
-<!-- form vars: "title", "description" -->
+<!-- Form for creating a new task -->
 <form class="create-list-card" class:active={isOpen} method="POST" action="?/create">
     <h2 class="mg-bottom">Create a New Task</h2>
 
@@ -199,6 +230,7 @@
     aria-pressed="false"
     tabindex="0"
 />
+<!-- Dropdown menu for reordering tasks -->
 <div class="section-dropdown" class:active={showdropdown}>
 {#each ["todo", "d", "inprogress", "d", "completed", "d", "dropped"] as section}
 {#if section == "d"}
@@ -220,6 +252,34 @@
     tabindex="0"
 />
 {/if}
+<!-- Form for editing a task -->
+<form class="create-list-cardd" class:active={isEditing} method="POST" action="?/create">
+    <h2 class="mg-bottomm">Edit Task</h2>
+
+    <div class="mg-bottomm">
+        <label for="taskname" >Title ({title.length}/100)</label>
+        <input name="taskname" type="text" bind:value={edit_title} placeholder="Title..."/>
+    </div>
+
+    <label for="date">Due Date</label>
+    <input type="date" class="mg-bottomm" name="date" bind:value={edit_date}/>
+
+    <label for="listname">Description ({description.length}/500)</label>
+    <textarea class="mg-bottomm" name="description" bind:value={edit_description} placeholder="Description..." />
+
+    <div class="place-endd">
+        <button class="create" on:click={finish_edit}>Finalize</button>
+    </div>
+</form>
+<div
+    class="full-window-overlayy"
+    class:active={isEditing}
+    on:click={() => isEditing = false}
+    on:keydown={() => isEditing = false}
+    role="button"
+    aria-pressed="false"
+    tabindex="0"
+/>
 
 <style>
     .section-dropdown {
@@ -388,6 +448,18 @@
         -webkit-filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
         filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
     }
+    .edit-button {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-left: 1rem;
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+    .edit-button:hover {
+        cursor: pointer;
+        -webkit-filter: invert(0.5);
+        filter: invert(0.5);
+    }
     .list-entry-description {
         width: 90%;
         margin-left: 5%;
@@ -405,7 +477,7 @@
         font-size: 3rem;
     }
     /* Form Styling */
-    .create-list-card {
+    .create-list-card, .create-list-cardd {
 		z-index: 1002;
 		position: fixed;
 		left: 50%;
@@ -423,33 +495,37 @@
 		transition: all 0.125s ease-in;
 	}
 
-	.create-list-card.active {
+	.create-list-card.active, .create-list-cardd.active {
 		top: 50%;
 		opacity: 1;
 		visibility: visible;
 	}
 
-	.create-list-card .place-end {
+	.create-list-card .place-end, .create-list-cardd .place-endd {
 		justify-self: end;
 	}
 
-	.create-list-card .mg-bottom {
+	.create-list-card .mg-bottom, .create-list-cardd .mg-bottomm {
 		margin-block-end: 1rem;
 	}
 
-	.create-list-card h2 {
+	.create-list-card h2, .create-list-cardd h2 {
 		margin-block: 0;
 		font-size: 1.75rem;
 	}
 
-	.create-list-card textarea {
+	.create-list-card textarea, .create-list-cardd textarea {
 		height: 10rem;
 		resize: none;
 	}
 
 	.create-list-card input[type='text'],
     .create-list-card input[type='date'],
-	.create-list-card textarea {
+	.create-list-card textarea, 
+    .create-list-cardd input[type='text'],
+    .create-list-cardd input[type='date'],
+    .create-list-cardd textarea
+    {
 		background-color: #2e3440;
 		font-size: 1rem;
 		padding: 0.5rem 1rem;
@@ -461,7 +537,7 @@
         width: 96%;
 	}
 
-	.create-list-card .create {
+	.create-list-card .create, .create-list-cardd .create {
 		outline: none;
 		border: none;
 		cursor: pointer;
@@ -474,11 +550,11 @@
 		transition: all 0.2s ease-in;
 	}
 
-	.create-list-card .create:hover {
+	.create-list-card .create:hover, .create-list-cardd .create:hover {
 		opacity: 0.7;
 	}
 
-    .full-window-overlay {
+    .full-window-overlay, .full-window-overlayy {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -491,7 +567,7 @@
 		visibility: hidden;
 	}
 
-	.full-window-overlay.active {
+	.full-window-overlay.active, .full-window-overlayy.active {
 		opacity: 1;
 		visibility: visible;
 	}

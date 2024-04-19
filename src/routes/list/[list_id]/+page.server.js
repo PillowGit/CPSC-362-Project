@@ -144,4 +144,13 @@ export const actions = {
             throw new Error("Failed to update list data in database");
         }
     },
+    edit: async({ request, params }) => {
+        // Get data from form submission
+        const req_data = await request.json();
+        const old_title = req_data.old_title;
+        const new_title = req_data.title;
+        const new_description = req_data.description;
+        const new_date = req_data.date;
+        console.dir(req_data);
+    },
 }
