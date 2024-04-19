@@ -47,11 +47,13 @@
     // Necessary js for editing a task
     let isEditing = false;
     let old_title = '';
+    let old_section = '';
     let edit_title = '';
     let edit_description = '';
     let edit_date = '';
-    function open_edit(old_t, old_d, old_da) {
+    function open_edit(old_t, old_d, old_da, old_s) {
         old_title = old_t;
+        old_section = old_s;
         edit_title = old_t;
         edit_description = old_d;
         edit_date = old_da;
@@ -72,7 +74,19 @@
             },
             body: JSON.stringify(body),
         });
-        alert("done, with response code", response.status);
+        // Handle action error
+        if (response.status === 500) {
+            alert("Failed to edit task.");
+        }
+        // Update task locally
+        const new_task_info = {
+            "title": edit_title,
+            "description": edit_description,
+            "date": edit_date,
+        }
+        organized_entries[old_section] = organized_entries[old_section].filter((entry) => entry.title !== old_title);
+        organized_entries[old_section].push(new_task_info);
+        organized_entries[old_section].sort((a, b) => datetoint(a.date) - datetoint(b.date));
     }
 
     // Define function to delete a task
@@ -182,7 +196,7 @@
             <h3>{entry.title}</h3>
             <div class="list-entry-title-buttons">
                 <!-- Reorder and delete buttons -->
-                <img src="/images/edit.svg" alt="Edit" class="edit-button" on:click={() => open_edit(entry.title, entry.description, entry.date)}/>
+                <img src="/images/edit.svg" alt="Edit" class="edit-button" on:click={() => open_edit(entry.title, entry.description, entry.date, section)}/>
                 <img src="/images/reorder.svg" alt="Reorder" class="reorder-button" on:click={() => open_dropdown(section, entry.title)}/>
                 <img src="/images/trash.svg" alt="Delete" class="trash-button" on:click={async () => await delete_task(section, entry.title)}/>
             </div>
@@ -253,7 +267,7 @@
 />
 {/if}
 <!-- Form for editing a task -->
-<form class="create-list-cardd" class:active={isEditing} method="POST" action="?/create">
+<div class="create-list-cardd" class:active={isEditing}>
     <h2 class="mg-bottomm">Edit Task</h2>
 
     <div class="mg-bottomm">
@@ -270,7 +284,7 @@
     <div class="place-endd">
         <button class="create" on:click={finish_edit}>Finalize</button>
     </div>
-</form>
+</div>
 <div
     class="full-window-overlayy"
     class:active={isEditing}

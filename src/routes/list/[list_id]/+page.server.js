@@ -52,7 +52,6 @@ export const actions = {
         // Ensure our task is not already in the list
         for (let i = 0; i < entries.length; i++) {
             if (entries[i].title === taskname) {
-                console.log("error foun");
                 return fail(400, {"errors": ["Task with this title already exists"]});
             }
         }
@@ -148,9 +147,43 @@ export const actions = {
         // Get data from form submission
         const req_data = await request.json();
         const old_title = req_data.old_title;
-        const new_title = req_data.title;
-        const new_description = req_data.description;
-        const new_date = req_data.date;
-        console.dir(req_data);
+        const new_title = req_data.edit_title;
+        const new_description = req_data.edit_description;
+        const new_date = req_data.edit_date;
+        // Get the list associated with this page
+        const list_id = params.list_id;
+        let entries = (await getLists([list_id]))[list_id];
+        if (entries === undefined) {
+            throw new Error("Failed to update list data in database");
+        }
+        entries = entries.entries;
+        // Now attempt to edit the task data
+        for (let i = 0; i < entries.length; i++) {
+            if (entries[i].title === old_title) {
+                // If all data is the same, just return and do nothing
+                if (entries[i].title === new_title && entries[i].description === new_description && entries[i].date === new_date) {
+                    return;
+                }
+                entries[i].title = new_title;
+                entries[i].description = new_description;
+                entries[i].date = new_date;
+                break;
+            }
+        }
+        // Remove list data from our cache so the site can update
+        try {
+            await remove_item("lists", list_id);
+        } catch (error) {
+            throw new Error("Failed to update list data in database");
+        }
+        // Update the list in firebase
+        const db_res = await addData("userdata", "lists", {
+            [params.list_id]: {
+                entries: entries
+            }
+        });
+        if (db_res.error !== null) {
+            throw new Error("Failed to update list data in database");
+        }
     },
 }
