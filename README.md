@@ -7,7 +7,9 @@ This project was built using:
 * `node v21.7.2`
 * `npm v10.5.0`
 
-While this may work on newer/older versions, it is not guaranteed. If it is your first time attempting to run this code locally, make sure you run `npm install` from the root directory to create the required node packages.
+While this may work on newer/older versions, it is not guaranteed. 
+
+To install every required package instantly, run `npm install` from the root directory. This is a required step for hosting the code locally for the first time.
 
 ## Running & Live Testing
 
